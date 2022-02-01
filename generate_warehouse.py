@@ -19,8 +19,8 @@ import argparse
 
 parser = argparse.ArgumentParser(description="Run warehouse script. By default, it runs on the last 2 backups.")
 parser.add_argument("pd_backup_dir", type=pathlib.Path,
-                    help="The directory containing archived PD backups. It should contain a subdirectory of the "
-                         "form 'YYYY-MM-DD'.")
+                    help="The directory containing archived PD backups. It should contain tarred and gzipped files"
+                         "in the format pd-YYYYMMDD.tar.gz")
 parser.add_argument("--start_date", type=lambda s: datetime.strptime(s, '%Y-%m-%d'),
                     action='store', help="The date to start the warehouse processing from. Format: YYYY-MM-DD")
 parser.add_argument("--end_date", type=lambda s: datetime.strptime(s, '%Y-%m-%d'), action='store',

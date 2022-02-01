@@ -95,22 +95,27 @@ before running the script.
 
     $ python pd_warehouse.py /path/to/pd_base_dir 
 
+
 3. Compare all files in the directory
 
 
     $ python pd_warehouse.py /path/to/pd_base_dir --all
+
 
 3. Compare files from 2022-01-01 to 2022-01-05
 
 
     $ python pd_warehouse.py /path/to/pd_base_dir --start-date 2022-01-01 --end-date 2022-01-05
 
+
 4. Compare files from 2022-01-03 to the latest file in the directory
 
 
     $ python pd_warehouse.py /path/to/pd_base_dir --start-date 2022-01-03
 
+
 5. Compare files from the earliest date up to 2022-01-05
 
 
     $ python pd_warehouse.py /path/to/pd_base_dir --end-date 2022-01-05
+
