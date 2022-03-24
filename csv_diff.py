@@ -11,7 +11,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 def get_fieldnames(fields):
-    fieldnames = ",".join([f['id'] for f in fields])+",owner_org,log_date,log_activity"
+    fieldnames = ",".join([f['id'] for f in fields])+",record_created,record_modified,user_modified,owner_org,log_date,log_activity"
     return fieldnames
 
 

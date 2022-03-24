@@ -67,7 +67,7 @@ if "nil" not in pd_type:
 else:
     pd_type = pd_type.replace("-", "_")
     search_pd = '*_{0}_*'.format(pd_type)
-    matching_files = sorted(glob.glob('../migrate/' + search_pd))
+    matching_files = sorted(glob.glob('./migrate/' + search_pd))
 
 while matching_files:
     try:

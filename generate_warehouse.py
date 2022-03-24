@@ -131,7 +131,7 @@ while tar_array:
             prev_csv_matches = [string for string in prev_array if pdfile in string]
             if prev_csv_matches:
                 csv_diff(prev_csv_matches[0], curr_csv,
-                    'http://open.canada.ca/data/en/recombinant-schema/{0}.json'.format(schema),
+                    'https://open.canada.ca/data/en/recombinant-schema/{0}.json'.format(schema),
                     'warehouse_reports/{0}_warehouse.csv'.format(pdtype))
 
 
