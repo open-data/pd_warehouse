@@ -90,9 +90,14 @@ result_rows, result_keys = add_metadata_fields(old_csv_dict,new_csv_dict,removed
 
 if result_rows:
     print("writing to {0}".format(outfile))
+    if not os.path.isfile(outfile):
+        need_header = True
+    else:
+        need_header = False
+
     with open(outfile, 'a', encoding='utf-8-sig') as f:
-        warehouse = csv.DictWriter(f, fieldnames=fieldnames, delimiter=',', restval='', extrasaction='ignore', lineterminator='\n')
-        if not os.path.isfile(outfile):
+        warehouse = csv.DictWriter(f, fieldnames=fieldnames, delimiter=',', restval='', extrasaction='ignore', lineterminator='\n', quotechar='"', quoting=csv.QUOTE_ALL)
+        if need_header:
             warehouse.writeheader()
         for row in result_keys:
             output_row = {}
