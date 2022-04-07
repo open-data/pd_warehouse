@@ -1,6 +1,7 @@
+#!/usr/bin/env python2 
+
 import argparse
 import os
-import pathlib
 import subprocess
 import sys
 import tarfile
@@ -11,8 +12,8 @@ def run_migrations(source_dir, target_dir):
 
     for csvfile in os.listdir(source_dir):
         print("Migrating {0} from directory {1} to {2}".format(csvfile, source_dir, target_dir))
-        proc = subprocess.Popen([sys.executable, 'migrate_all.py', pathlib.Path.joinpath(source_dir, csvfile),
-                                 pathlib.Path.joinpath(target_dir, csvfile)])
+        proc = subprocess.Popen([sys.executable, 'migrate_all.py', os.path.join(source_dir, csvfile),
+                                 os.path.join(target_dir, csvfile)])
         if proc.wait():
             sys.exit(1)
 
@@ -34,18 +35,22 @@ def main():
         if not tar_file.endswith('.tar.gz'):
             continue
         print('Migrating {0}'.format(tar_file))
-        with tempfile.TemporaryDirectory() as tmp_dir1:
-            with tempfile.TemporaryDirectory() as tmp_dir2:
-                print('Extracting {0} to {1}'.format(tar_file, tmp_dir1))
-                tar = tarfile.open(os.path.join(args.dir, tar_file))
-                tar.extractall(tmp_dir1)
-                tar.close()
-                run_migrations(tmp_dir1, tmp_dir2)
+        tmp_dir1 = tempfile.mkdtemp()
+        tmp_dir2 = tempfile.mkdtemp()
+        print('Extracting {0} to {1}'.format(tar_file, tmp_dir1))
+        tar = tarfile.open(os.path.join(args.dir, tar_file))
+        tar.extractall(tmp_dir1)
+        tar.close()
+        run_migrations(tmp_dir1, tmp_dir2)
 
-                tar2 = tarfile.open(os.path.join(args.target, tar_file), 'w:gz')
-                print('Creating {0}'.format(tar_file))
-                for root, dirs, files in os.walk(tmp_dir2):
-                    for file in files:
-                        tar2.add(os.path.join(root, file))
-                tar2.close()
+        tar2 = tarfile.open(os.path.join(args.target, tar_file), 'w:gz')
+        print('Creating {0}'.format(tar_file))
+        for root, dirs, files in os.walk(tmp_dir2):
+            for file in files:
+                tar2.add(os.path.join(root, file))
+        tar2.close()
+
+
+main()
+exit(0)
 
