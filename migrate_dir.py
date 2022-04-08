@@ -48,7 +48,7 @@ def main():
         print('Creating {0}'.format(tar_file))
         for root, dirs, files in os.walk(tmp_dir2):
             for file in files:
-                tar2.add(os.path.join(root, file))
+                tar2.add(os.path.join(root, file), os.path.join(tar_file[3:11], file))
         tar2.close()
 
         shutil.rmtree(tmp_dir1)

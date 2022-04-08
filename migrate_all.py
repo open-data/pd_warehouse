@@ -62,7 +62,7 @@ proc_array = []
 # Check if the input csv file is a *-nil data type, and retrieve only the nil migration scripts
 if "nil" not in pd_type:
     search_pd = '*_{0}_*'.format(pd_type)
-    matching_files = sorted([mf for mf in glob.glob('../migrate/'+search_pd) if "nil" not in mf])
+    matching_files = sorted([mf for mf in glob.glob('./migrate/'+search_pd) if "nil" not in mf])
 
 else:
     pd_type = pd_type.replace("-", "_")

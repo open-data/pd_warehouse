@@ -1,0 +1,13 @@
+# This Python 2.7 requirements file is for use with a separate virtual environment
+# need to run the CKAN PD CSV migration scripts. To run these scripts use the 
+# migrate_dir.py command which will in turn call the migrate_all.py and the migration
+# scripts which should be in the ./migrate folder.
+et-xmlfile == 1.0.1
+jdcal == 1.4.1
+openpyxl == 2.6.4
+pathlib2 == 2.3.7.post1
+scandir == 1.10.0
+six == 1.16.0
+typing == 3.10.0.0
+unicodecsv == 0.14.1
+
