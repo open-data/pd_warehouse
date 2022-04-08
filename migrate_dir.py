@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -49,6 +50,9 @@ def main():
             for file in files:
                 tar2.add(os.path.join(root, file))
         tar2.close()
+
+        shutil.rmtree(tmp_dir1)
+        shutil.rmtree(tmp_dir2)
 
 
 main()
