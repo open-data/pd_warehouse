@@ -13,6 +13,12 @@ def run_migrations(source_dir, target_dir):
 
     for csvfile in os.listdir(source_dir):
         print("Migrating {0} from directory {1} to {2}".format(csvfile, source_dir, target_dir))
+        # If the csv is empty, do not run the migrationsscript
+	file_size = os.path.getsize(os.path.join(source_dir, csvfile))
+	if file_size == 0:
+	    shutil.copyfile( os.path.join(source_dir, csvfile), os.path.join(target_dir, csvfile))
+            print("{0} is empty. Not migrating".format(csvfile))
+            continue
         proc = subprocess.Popen([sys.executable, 'migrate_all.py', os.path.join(source_dir, csvfile),
                                  os.path.join(target_dir, csvfile)])
         if proc.wait():
@@ -48,7 +54,8 @@ def main():
         print('Creating {0}'.format(tar_file))
         for root, dirs, files in os.walk(tmp_dir2):
             for file in files:
-                tar2.add(os.path.join(root, file), os.path.join(tar_file[3:11], file))
+#                tar2.add(os.path.join(root, file), os.path.join(tar_file[3:11], file))
+                tar2.add(os.path.join(root, file), file)
         tar2.close()
 
         shutil.rmtree(tmp_dir1)
