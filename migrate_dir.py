@@ -38,29 +38,36 @@ def main():
         print('Target directory {0} does not exist'.format(args.target))
         exit(1)
 
+    tmp_dir1 = ""
+    tmp_dir2 = ""
     for tar_file in os.listdir(args.dir):
-        if not tar_file.endswith('.tar.gz'):
-            continue
-        print('Migrating {0}'.format(tar_file))
-        tmp_dir1 = tempfile.mkdtemp()
-        tmp_dir2 = tempfile.mkdtemp()
-        print('Extracting {0} to {1}'.format(tar_file, tmp_dir1))
-        tar = tarfile.open(os.path.join(args.dir, tar_file))
-        tar.extractall(tmp_dir1)
-        tar.close()
-        run_migrations(tmp_dir1, tmp_dir2)
+        try:
+            if not tar_file.endswith('.tar.gz'):
+                continue
+            if os.path.isfile(os.path.join(args.target, tar_file)):
+                print("Target {0} already exists, skipping.".format(os.path.join(args.target, tar_file)))
+                continue
+            print('Migrating {0}'.format(tar_file))
+            tmp_dir1 = tempfile.mkdtemp()
+            tmp_dir2 = tempfile.mkdtemp()
+            print('Extracting {0} to {1}'.format(tar_file, tmp_dir1))
+            tar = tarfile.open(os.path.join(args.dir, tar_file))
+            tar.extractall(tmp_dir1)
+            tar.close()
+            run_migrations(tmp_dir1, tmp_dir2)
 
-        tar2 = tarfile.open(os.path.join(args.target, tar_file), 'w:gz')
-        print('Creating {0}'.format(tar_file))
-        for root, dirs, files in os.walk(tmp_dir2):
-            for file in files:
+            tar2 = tarfile.open(os.path.join(args.target, tar_file), 'w:gz')
+            print('Creating {0}'.format(tar_file))
+            for root, dirs, files in os.walk(tmp_dir2):
+                for file in files:
 #                tar2.add(os.path.join(root, file), os.path.join(tar_file[3:11], file))
-                tar2.add(os.path.join(root, file), file)
-        tar2.close()
-
-        shutil.rmtree(tmp_dir1)
-        shutil.rmtree(tmp_dir2)
-
+                    tar2.add(os.path.join(root, file), file)
+            tar2.close()
+        finally:
+            if os.path.isdir(tmp_dir1):
+                shutil.rmtree(tmp_dir1)
+            if os.path.isdir(tmp_dir2):
+                shutil.rmtree(tmp_dir2)
 
 main()
 exit(0)

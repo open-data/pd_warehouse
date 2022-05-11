@@ -44,7 +44,11 @@ def run_scripts(infile, outfile, matching_files):
         proc_array[0].stdin.write(chunk)
     proc_array[0].stdin.close()
 
-    for p in proc_array:
+    if proc_array[0].wait() == 85:
+        # sometimes IOError needs a little help
+        raise IOError
+
+    for p in proc_array[1:]:
         p.wait()
 
 
@@ -59,12 +63,12 @@ proc_array = []
 # Check if the input csv file is a *-nil data type, and retrieve only the nil migration scripts
 if "nil" not in pd_type:
     search_pd = 'migrate_{0}_*'.format(pd_type)
-    matching_files = sorted([mf for mf in glob.glob('../migrate/'+search_pd) if "nil" not in mf])
+    matching_files = sorted([mf for mf in glob.glob('./migrate/'+search_pd) if "nil" not in mf])
 
 else:
     pd_type = pd_type.replace("-", "_")
     search_pd = 'migrate_{0}_*'.format(pd_type)
-    matching_files = sorted(glob.glob('../migrate/' + search_pd))
+    matching_files = sorted(glob.glob('./migrate/' + search_pd))
 
 while matching_files:
     try:
